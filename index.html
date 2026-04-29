@@ -18,6 +18,19 @@
         overflow: hidden;
     }
 
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        opacity: 0;
+        transition: opacity 1.5s ease;
+        z-index: 1;
+    }
+
+    .overlay.active {
+        opacity: 1;
+    }
+
     .box {
         background: #8b5e3c;
         padding: 30px;
@@ -55,17 +68,36 @@
         line-height: 1.6;
         max-width: 500px;
         border-right: 2px solid #fff;
-        white-space: nowrap;
+        white-space: normal;
         overflow: hidden;
+        min-height: 120px;
     }
 
     iframe {
         margin-top: 20px;
         border-radius: 10px;
     }
+
+    .play-btn {
+        margin-top: 15px;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 20px;
+        background: #d2b48c;
+        color: #5c4033;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .play-btn:hover {
+        transform: scale(1.05);
+    }
 </style>
 </head>
 <body>
+
+<div id="overlay" class="overlay"></div>
 
 <div class="box" onclick="showMessage()">
     <h2>I am sorry Pratsu 💔</h2>
@@ -73,7 +105,11 @@
 
     <div id="content" class="hidden">
         <div id="typingText" class="message"></div>
-        <iframe id="song" width="300" height="170" src="" title="Meri Banogi Kya" allow="autoplay"></iframe>
+
+        <!-- Play Button -->
+        <button class="play-btn" onclick="playSong(event)">Tap to hear this for you ❤️</button>
+
+        <iframe id="song" width="300" height="170" src="" allow="autoplay"></iframe>
     </div>
 </div>
 
@@ -85,7 +121,7 @@ function typeEffect() {
     if (i < text.length) {
         document.getElementById("typingText").innerHTML += text.charAt(i);
         i++;
-        setTimeout(typeEffect, 30);
+        setTimeout(typeEffect, 40);
     }
 }
 
@@ -94,25 +130,32 @@ function createFlower() {
     flower.classList.add("flowers");
     flower.innerHTML = "🌸";
     flower.style.left = Math.random() * window.innerWidth + "px";
-    flower.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    flower.style.animationDuration = (Math.random() * 3 + 3) + "s";
     document.body.appendChild(flower);
 
     setTimeout(() => {
         flower.remove();
-    }, 5000);
+    }, 6000);
 }
 
 function startFlowers() {
-    setInterval(createFlower, 300);
+    setInterval(createFlower, 250);
 }
 
 function showMessage() {
     document.getElementById('content').classList.remove('hidden');
-    document.getElementById('song').src = "https://www.youtube.com/embed/3cX8Xw9XQ0M?autoplay=1";
+    document.getElementById("overlay").classList.add("active");
+
     typeEffect();
     startFlowers();
+}
+
+function playSong(e) {
+    e.stopPropagation();
+    document.getElementById('song').src = "https://www.youtube.com/embed/uoLC9u_M-E8?autoplay=1";
 }
 </script>
 
 </body>
 </html>
+
